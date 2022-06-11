@@ -3,6 +3,12 @@ name = "downscale_image"
 version = "0.1.0"
 description = "downscale image to desired file size"
 authors = ["mshafer1"]
+license = "MIT"
+readme = "README.md"
+repository = "https://github.com/mshafer1/downscale_image"
+include = [
+    "LICENSE",
+]
 
 [tool.poetry.dependencies]
 python = "^3.7"
