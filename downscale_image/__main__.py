@@ -1,12 +1,15 @@
 """Downscale an image to desired file size."""
 import pathlib
 import sys
+from platform import platform
 
 import click
 
 import downscale_image
 
-if sys.platform.lower() == "windows":
+_ON_WINDOWS = platform.system().lower() == "windows"
+
+if _ON_WINDOWS:
     from downscale_image import _registry_utils
 
 
@@ -28,7 +31,7 @@ if sys.platform.lower() == "windows":
 def main(max_size, in_file, add_to_right_click_menu: bool):
     """Downscale in_file to desired max-size."""
     if add_to_right_click_menu:
-        if sys.platform.lower() != "windows":
+        if not _ON_WINDOWS:
             raise Exception("Error, registry right click menus are only support on Windows.")
         exe = pathlib.Path(sys.argv[0])
         args = ['"%*"']
