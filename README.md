@@ -1,7 +1,7 @@
 # downscale_image
 A utility to downscale an image to the desired file size.
 
-Relies on an install of ffmpeg to incrementing downscale the image file into a new file.
+Relies on an install of ffmpeg to incrementally downscale the image file into a new file.
 
 This modules provides the script `downscale-image`
 
