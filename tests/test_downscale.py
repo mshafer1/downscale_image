@@ -1,12 +1,14 @@
 """Test the downscale functionality."""
+import io
 import pathlib
 import shutil
-import io
-from typing import Callable, List, NamedTuple
+from typing import Callable
+from typing import List
+from typing import NamedTuple
 
+import click.testing
 import pytest
 from pytest_snapshot.plugin import Snapshot
-import click.testing
 
 import tests
 
