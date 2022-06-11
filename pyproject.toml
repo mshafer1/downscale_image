@@ -15,6 +15,16 @@ pytest-snapshot = ">=0.9.0"
 pytest-cov = ">=3.0"
 
 ni-python-styleguide = ">=0.1.10"
+poethepoet = ">=0.13.1"
+
+[tool.black]
+line-length = 100
+
+[tool.poe.tasks]
+test   = "pytest -vv --cov=downscale_image --cov-report html --cov-report term-missing"
+lint = "ni-python-styleguide lint"
+fix = "ni-python-styleguide fix"
+format = "black ."
 
 [tool.poetry.scripts]
 "downscale-image" = "downscale_image.__main__:main"
