@@ -4,6 +4,7 @@ from typing import NamedTuple
 
 import pytest
 from pytest_snapshot.plugin import Snapshot
+import click.testing
 
 
 class _ResultInfo(NamedTuple):
@@ -12,10 +13,21 @@ class _ResultInfo(NamedTuple):
 
 
 @pytest.fixture(params=[1, 2, 3], ids=lambda v: f"{v}MB")
-def test_result(request, test_image):
+def test_result(
+    request, test_image: pathlib.Path, runner: Callable[[List[str]], click.testing.Result]
+):
     max_mb: int = request.param
-    output = downscale_image.downscale(img=test_image, max_mega_bytes=max_mb)
-    yield _ResultInfo(output, max_mb)
+    if max_mb == 2:
+        runner_result = runner([str(test_image)])
+    else:
+        runner_result = runner([f"--max-size={max_mb}", str(test_image)])
+    assert runner_result.exception is None
+
+    output = test_image.parent / (test_image.stem + "_smaller" + ".".join(test_image.suffixes))
+    if output.is_file():
+        yield _ResultInfo(output, max_mb)
+    else:
+        yield _ResultInfo(test_image, max_mb)
 
 
 def test___image___downscale___outputs_expected_file(test_result: _ResultInfo, snapshot: Snapshot):

@@ -5,8 +5,8 @@ import downscale_image
 
 
 @click.command()
-@click.option("--max_size", default=2, help="Max output size (in MB)")
-@click.argument("in_file", help="The file to downscale", type=click.Path())
+@click.option("--max-size", default=2, help="Max output size (in MB)")
+@click.argument("in_file", type=click.Path())
 def main(max_size, in_file):
     in_file = pathlib.Path(in_file)
 
