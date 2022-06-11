@@ -5,7 +5,10 @@ import sys
 import click
 
 import downscale_image
-from downscale_image import _registry_utils
+
+if sys.platform.lower() == "windows":
+    from downscale_image import _registry_utils
+
 
 @click.command()
 @click.option(
@@ -13,7 +16,7 @@ from downscale_image import _registry_utils
     default=2,
     help="Max output size (in MB)",
     type=click.IntRange(min=0, min_open=True),
-    show_default=True
+    show_default=True,
 )
 @click.option(
     "--add-to-right-click-menu",
@@ -25,6 +28,8 @@ from downscale_image import _registry_utils
 def main(max_size, in_file, add_to_right_click_menu: bool):
     """Downscale in_file to desired max-size."""
     if add_to_right_click_menu:
+        if sys.platform.lower() != "windows":
+            raise Exception("Error, registry right click menus are only support on Windows.")
         exe = pathlib.Path(sys.argv[0])
         args = ['"%*"']
         _registry_utils.register_downscale_commands(str(exe), args)
@@ -42,6 +47,7 @@ def main(max_size, in_file, add_to_right_click_menu: bool):
         print("")
         input("Press enter to continue...")
         click.Abort(e)
+
 
 if __name__ == "__main__":  # pragma: no cover
     main()
