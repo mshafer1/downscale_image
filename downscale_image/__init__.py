@@ -21,6 +21,9 @@ def _scale(img: pathlib.Path, scale: float) -> pathlib.Path:
     except subprocess.CalledProcessError:
         print(output, file=sys.stderr)
         raise
+    except FileNotFoundError:
+        print("Error, Could not find ffmpeg to execute. Make sure it is on the PATH variable.", file=sys.stderr)
+        raise
     return result
 
 def downscale(img: pathlib.Path, max_mega_bytes: int) -> pathlib.Path:
