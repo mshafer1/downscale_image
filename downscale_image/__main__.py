@@ -1,7 +1,7 @@
 """Downscale an image to desired file size."""
 import pathlib
 import sys
-from platform import platform
+import platform
 
 import click
 
