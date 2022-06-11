@@ -5,7 +5,7 @@ description = "downscale image to desired file size"
 authors = ["mshafer1"]
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.7"
 click = ">=8.0"
 # TODO: consider adding static-ffmpeg (https://pypi.org/project/static-ffmpeg/) to remove system dep
 
