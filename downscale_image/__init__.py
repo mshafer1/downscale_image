@@ -37,7 +37,7 @@ def _scale(img: pathlib.Path, scale: float) -> pathlib.Path:
 
 
 def downscale(img: pathlib.Path, max_mega_bytes: int) -> pathlib.Path:
-    """Incrementaly downscale img until it is <= max_mega_bytes in size."""
+    """Incrementally downscale img until it is <= max_mega_bytes in size."""
     current_size = _get_file_size_in_mega(img)
     working_img = img
     current_scale = 0.9
