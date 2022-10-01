@@ -5,6 +5,7 @@ import shutil
 import subprocess
 import sys
 
+SUPPORTED_FILE_EXTENSIONS = [".jpg", ".jpeg", ".png", ".bmp"]
 
 def _bytes_to_mega_bytes(bytes: int) -> float:
     return bytes / 1024 / 1024
