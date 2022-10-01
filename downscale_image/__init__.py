@@ -23,7 +23,7 @@ def _scale(img: pathlib.Path, scale: float) -> pathlib.Path:
     result = img.parent / out_name
     try:
         output = subprocess.check_output(
-            f'ffmpeg -i "{img}" -vf scale="iw/{as_divisor:.2f}:-1" "{result}"'
+            f'ffmpeg -i "{img}" -vf scale="iw/{as_divisor:.2f}:-1" "{result}"', stderr=subprocess.STDOUT
         )
     except subprocess.CalledProcessError:
         print(output, file=sys.stderr)
