@@ -13,7 +13,12 @@ _ON_WINDOWS = platform.system().lower() == "windows"
 if _ON_WINDOWS:
     from downscale_image import _registry_utils
 
-_DEFAULT_MATCHES = ["!.venv/", "!.git/", "!objects/"] + [f"*{ext}" for ext in downscale_image.SUPPORTED_FILE_EXTENSIONS]
+_DEFAULT_MATCHES = (
+    ["!.venv/", "!.git/", "!objects/"]
+    + [f"*{ext}" for ext in downscale_image.SUPPORTED_FILE_EXTENSIONS]
+    + [f"*{ext}".upper() for ext in downscale_image.SUPPORTED_FILE_EXTENSIONS]
+)
+
 
 @click.command()
 @click.option(
