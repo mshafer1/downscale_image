@@ -19,6 +19,7 @@ _DEFAULT_MATCHES = (
     + [f"*{ext}" for ext in downscale_image.SUPPORTED_FILE_EXTENSIONS]
     + [f"*{ext}".upper() for ext in downscale_image.SUPPORTED_FILE_EXTENSIONS]
 )
+_CWD = pathlib.Path.cwd()
 
 
 @click.command()
@@ -46,7 +47,7 @@ def main(max_size, in_file: typing.Tuple[pathlib.Path], add_to_right_click_menu:
         _registry_utils.register_downscale_commands(str(exe), args)
 
 
-    files_to_prcoess = []
+    files_to_prcoess: typing.List[pathlib.Path] = []
 
     for path in in_file:
         if path.is_dir():
@@ -60,7 +61,7 @@ def main(max_size, in_file: typing.Tuple[pathlib.Path], add_to_right_click_menu:
     if not files_to_prcoess:
         print("Nothing to process.")
     for file in files_to_prcoess:
-        print(f"Downscaling {file}...")
+        print(f"Downscaling {file.relative_to(_CWD)}...")
         try:
             downscale_image.downscale(file, max_mega_bytes=max_size)
             print(f"Finished")
