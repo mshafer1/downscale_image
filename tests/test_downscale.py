@@ -50,19 +50,6 @@ def test___image___downscale___output_is_request_size(test_result: _ResultInfo):
     assert out_file_size < test_result.max_mb
 
 
-def test___invalid_path___downscale___errors(
-    runner: Callable[[List[str]], click.testing.Result],
-    tmp_path: pathlib.Path,
-    monkeypatch,
-):
-    """Given an invalid path, assert that useful information is printed and errored out."""
-    monkeypatch.setattr("sys.stdin", io.StringIO("\n" * 5))
-    result = runner([str(tmp_path)])
-
-    assert result.exception is not None
-    assert "Invalid value for 'IN_FILE': File" in result.output
-
-
 def test___ffmpeg_not_found___downscale___prints_message(
     runner: Callable[[List[str]], click.testing.Result],
     tmp_path: pathlib.Path,
