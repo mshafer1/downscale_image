@@ -42,7 +42,7 @@ def main(max_size, in_file: typing.Tuple[pathlib.Path], add_to_right_click_menu:
         if not _ON_WINDOWS:
             raise Exception("Error, registry right click menus are only support on Windows.")
         exe = pathlib.Path(sys.argv[0])
-        args = ['"%1"']
+        args = []
         _registry_utils.register_downscale_commands(str(exe), args)
 
 
