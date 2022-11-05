@@ -17,7 +17,7 @@ def register_downscale_commands(path_to_program, args):
         (r"Directory\Background\shell\DownScaleImage", "Downscale Images Here"),
     ]:
         _set_run_key(path, name, section=winreg.HKEY_CLASSES_ROOT)
-        _set_run_key(path + r"\command", rf'"{path_to_program}"' + " " + " ".join(args + ['"%1"']), section=winreg.HKEY_CLASSES_ROOT)
+        _set_run_key(path + r"\command", rf'"{path_to_program}"' + " " + " ".join(args + ['"%v."']), section=winreg.HKEY_CLASSES_ROOT)
 
 
 def _set_run_key(key, value, *_, section=winreg.HKEY_CURRENT_USER):
