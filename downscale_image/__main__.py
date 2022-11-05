@@ -62,7 +62,7 @@ def main(max_size, in_file: typing.Tuple[pathlib.Path], add_to_right_click_menu:
         print("Nothing to process.")
     for file in files_to_prcoess:
         try:
-            file = file.relative_to(_CWD)
+            file = file.resolve().relative_to(_CWD)
         except ValueError:
             file = file.resolve()
         print(f"Downscaling {file}...")
