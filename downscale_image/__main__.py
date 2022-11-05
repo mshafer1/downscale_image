@@ -56,6 +56,7 @@ def main(max_size, in_file, add_to_right_click_menu: bool):
         files_to_prcoess = [in_file]
 
     fail_count = 0
+    last_error = None
     for file in files_to_prcoess:
         print(f"Downscaling {file}...")
         try:
@@ -68,12 +69,13 @@ def main(max_size, in_file, add_to_right_click_menu: bool):
                 break
             print("An error occured", file=sys.stderr)
             print(e, file=sys.stderr)
+            last_error = e
             print("")
             print("")
-    if fail_count > 0:
+    if last_error:
         print("See above for errors")
         input("Press enter to continue...")
-        click.Abort(e)
+        click.Abort(last_error)
 
 
 if __name__ == "__main__":  # pragma: no cover
