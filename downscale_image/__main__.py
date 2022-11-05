@@ -52,7 +52,7 @@ def main(max_size, in_file: typing.Tuple[pathlib.Path], add_to_right_click_menu:
     for path in in_file:
         if path.is_dir():
             spec = pathspec.PathSpec.from_lines(pathspec.patterns.GitWildMatchPattern, _DEFAULT_MATCHES)
-            files_to_prcoess.extend([pathlib.Path(p) for p in spec.match_tree(path)])
+            files_to_prcoess.extend([path / p for p in spec.match_tree(path)])
         else:
             files_to_prcoess.append(path)
 
