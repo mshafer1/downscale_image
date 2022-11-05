@@ -61,7 +61,10 @@ def main(max_size, in_file: typing.Tuple[pathlib.Path], add_to_right_click_menu:
     if not files_to_prcoess:
         print("Nothing to process.")
     for file in files_to_prcoess:
-        print(f"Downscaling {file.relative_to(_CWD)}...")
+        try:
+            print(f"Downscaling {file.relative_to(_CWD)}...")
+        except ValueError:
+            print(f"Downscaling {file.resolve()}...")
         try:
             downscale_image.downscale(file, max_mega_bytes=max_size)
             print(f"Finished")
