@@ -43,6 +43,7 @@ def main(max_size, in_file, add_to_right_click_menu: bool):
         exe = pathlib.Path(sys.argv[0])
         args = ['"%1"']
         _registry_utils.register_downscale_commands(str(exe), args)
+        return
 
     in_file = pathlib.Path(in_file)
 
