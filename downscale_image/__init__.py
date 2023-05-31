@@ -17,14 +17,12 @@ def _get_file_size_in_mega(file: pathlib.Path) -> float:
     return _bytes_to_mega_bytes(file_size)
 
 
-def _scale(img: pathlib.Path, scale: float) -> pathlib.Path:
+def _scale(img: pathlib.Path, out_img: pathlib.Path, scale: float) -> pathlib.Path:
     """Use ffmpeg to scale the image by the desired amount."""
     as_divisor = 1 / scale
-    out_name = img.stem + "_smaller" + ".".join(img.suffixes)
-    result = img.parent / out_name
     try:
         output = subprocess.check_output(
-            f'ffmpeg -i "{img}" -vf scale="iw/{as_divisor:.2f}:-1" "{result}"',
+            f'ffmpeg -i "{img}" -vf scale="iw/{as_divisor:.2f}:-1" "{out_img}"',
             stderr=subprocess.STDOUT,
         )
     except subprocess.CalledProcessError:
@@ -36,7 +34,7 @@ def _scale(img: pathlib.Path, scale: float) -> pathlib.Path:
             file=sys.stderr,
         )
         raise
-    return result
+    return out_img
 
 
 def downscale(
@@ -51,13 +49,14 @@ def downscale(
         return img
 
     working_img = img.parent / (output_prefix + img.stem + outtput_suffix + ".".join(img.suffixes))
+    working_img.parent.mkdir(exist_ok=True, parents=True)
     shutil.copyfile(img, working_img)
 
     while current_size > max_mega_bytes:
         if working_img.is_file():
             working_img.unlink()
 
-        working_img = _scale(img, scale=current_scale)
+        working_img = _scale(img, out_img=working_img, scale=current_scale)
 
         current_size = _get_file_size_in_mega(working_img)
         current_scale -= 0.1
