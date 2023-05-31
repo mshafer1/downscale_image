@@ -15,7 +15,7 @@ if _ON_WINDOWS:
     from downscale_image import _registry_utils
 
 _DEFAULT_MATCHES = (
-    ["!.venv/", "!.git/", "!objects/", "!.ts/"]
+    ["!.venv/", "!.git/", "!objects/", "!.ts/*"]
     + [f"*{ext}" for ext in downscale_image.SUPPORTED_FILE_EXTENSIONS]
     + [f"*{ext}".upper() for ext in downscale_image.SUPPORTED_FILE_EXTENSIONS]
 )
