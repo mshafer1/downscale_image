@@ -70,7 +70,7 @@ def main(
     for path in in_file:
         if path.is_dir():
             spec = pathspec.PathSpec.from_lines(
-                pathspec.patterns.GitWildMatchPattern, _DEFAULT_MATCHES + [f"*{suffix}.*"]
+                pathspec.patterns.GitWildMatchPattern, _DEFAULT_MATCHES + [f"!*{suffix}.*"]
             )
             files_to_prcoess.extend([path / p for p in spec.match_tree(path)])
         else:
