@@ -6,6 +6,8 @@ import typing
 
 import click
 import pathspec
+import tqdm
+import tqdm.contrib.logging
 
 import downscale_image
 
@@ -85,27 +87,29 @@ def main(
     last_error = None
     if not files_to_prcoess:
         print("Nothing to process.")
-    for file in files_to_prcoess:
-        try:
-            file = file.resolve().relative_to(_CWD)
-        except ValueError:
-            file = file.resolve()
-        print(f"Downscaling {file}...")
-        try:
-            output = downscale_image.downscale(
-                file, max_mega_bytes=max_size, output_prefix=prefix, outtput_suffix=suffix, override_output_format=override_output_format
-            )
-            print(f"Finished. Output stored in {output}\n\n")
-        except Exception as e:
-            fail_count += 1
-            if fail_count > 5:
-                print("Several errors have occured, stopping")
-                break
-            print("An error occured", file=sys.stderr)
-            print(e, file=sys.stderr)
-            last_error = e
-            print("")
-            print("")
+    file: pathlib.Path
+    with tqdm.contrib.logging.logging_redirect_tqdm():
+        for file in tqdm.tqdm(files_to_prcoess, desc="Downscaling: "):
+            try:
+                file = file.resolve().relative_to(_CWD)
+            except ValueError:
+                file = file.resolve()
+            print(f"Downscaling {file}...")
+            try:
+                output = downscale_image.downscale(
+                    file, max_mega_bytes=max_size, output_prefix=prefix, outtput_suffix=suffix, override_output_format=override_output_format
+                )
+                print(f"Finished. Output stored in {output}\n\n")
+            except Exception as e:
+                fail_count += 1
+                if fail_count > 5:
+                    print("Several errors have occured, stopping")
+                    break
+                print("An error occured", file=sys.stderr)
+                print(e, file=sys.stderr)
+                last_error = e
+                print("")
+                print("")
     if last_error:
         print("See above for errors")
         input("Press enter to continue...")
