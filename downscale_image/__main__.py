@@ -31,12 +31,15 @@ _CWD = pathlib.Path.cwd()
     show_default=True,
 )
 @click.option(
-    "--suffix", default="_smaller", help="Additional name to add when generating new file name."
-)
-@click.option(
     "--prefix",
     default="",
     help="Additional part of name to add start of new file name. (include a '/' to denote a folder)",
+)
+@click.option(
+    "--suffix", default="_smaller", help="Additional name to add when generating new file name.", show_default=True
+)
+@click.option(
+    "--override-output-format", help="Change output file extensions (useful for wanting to switch from png to jpg or vice verse)"
 )
 @click.option(
     "--add-to-right-click-menu",
@@ -56,6 +59,7 @@ def main(
     add_to_right_click_menu: bool,
     suffix: str,
     prefix: str,
+    override_output_format: typing.Optional[str],
 ):
     """Downscale file_or_directory to desired max-size."""
     if add_to_right_click_menu:
@@ -88,7 +92,7 @@ def main(
         print(f"Downscaling {file}...")
         try:
             output = downscale_image.downscale(
-                file, max_mega_bytes=max_size, output_prefix=prefix, outtput_suffix=suffix
+                file, max_mega_bytes=max_size, output_prefix=prefix, outtput_suffix=suffix, override_output_format=override_output_format
             )
             print(f"Finished. Output stored in {output}\n\n")
         except Exception as e:
