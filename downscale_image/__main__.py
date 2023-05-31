@@ -87,10 +87,10 @@ def main(
             file = file.resolve()
         print(f"Downscaling {file}...")
         try:
-            downscale_image.downscale(
+            output = downscale_image.downscale(
                 file, max_mega_bytes=max_size, output_prefix=prefix, outtput_suffix=suffix
             )
-            print(f"Finished")
+            print(f"Finished. Output stored in {output}\n\n")
         except Exception as e:
             fail_count += 1
             if fail_count > 5:
