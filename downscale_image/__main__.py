@@ -50,6 +50,12 @@ _CWD = pathlib.Path.cwd()
     is_flag=True,
     default=False,
 )
+@click.option(
+    "--continue-on-errors",
+    help="Even if multiple errors are encountered keep going through all images",
+    is_flag=True,
+    default=False
+)
 @click.argument(
     "in_file",
     nargs=-1,
@@ -63,6 +69,7 @@ def main(
     suffix: str,
     prefix: str,
     override_output_format: typing.Optional[str],
+    continue_on_errors: bool,
 ):
     """Downscale file_or_directory to desired max-size."""
     if add_to_right_click_menu:
@@ -102,7 +109,7 @@ def main(
                 print(f"Finished. Output stored in {output}\n\n")
             except Exception as e:
                 fail_count += 1
-                if fail_count > 5:
+                if not continue_on_errors and fail_count > 5:
                     print("Several errors have occured, stopping")
                     break
                 print("An error occured", file=sys.stderr)
