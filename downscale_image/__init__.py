@@ -44,6 +44,7 @@ def downscale(
     current_size = _get_file_size_in_mega(img)
     working_img = img
     current_scale = 1.0
+    current_multiplier = 10
 
     if current_size <= max_mega_bytes:
         return img
@@ -59,5 +60,9 @@ def downscale(
         working_img = _scale(img, out_img=working_img, scale=current_scale)
 
         current_size = _get_file_size_in_mega(working_img)
-        current_scale -= 0.1
+        current_scale -= 1 / current_multiplier
+        if current_scale < 0:
+            current_scale = 1/current_multiplier
+            current_multiplier += 10
+
     return working_img
