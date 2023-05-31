@@ -15,7 +15,7 @@ if _ON_WINDOWS:
     from downscale_image import _registry_utils
 
 _DEFAULT_MATCHES = (
-    ["!.venv/", "!.git/", "!objects/"]
+    ["!.venv/", "!.git/", "!objects/", "!.ts/"]
     + [f"*{ext}" for ext in downscale_image.SUPPORTED_FILE_EXTENSIONS]
     + [f"*{ext}".upper() for ext in downscale_image.SUPPORTED_FILE_EXTENSIONS]
 )
@@ -27,8 +27,16 @@ _CWD = pathlib.Path.cwd()
     "--max-size",
     default=2,
     help="Max output size (in MB)",
-    type=click.IntRange(min=0, min_open=True),
+    type=click.FloatRange(min=0, min_open=True),
     show_default=True,
+)
+@click.option(
+    "--suffix", default="_smaller", help="Additional name to add when generating new file name."
+)
+@click.option(
+    "--prefix",
+    default="",
+    help="Additional part of name to add start of new file name. (include a '/' to denote a folder)",
 )
 @click.option(
     "--add-to-right-click-menu",
@@ -42,7 +50,13 @@ _CWD = pathlib.Path.cwd()
     metavar="FILE_OR_DIRECTORY",
     type=click.Path(exists=True, dir_okay=True, path_type=pathlib.Path),
 )
-def main(max_size, in_file: typing.Tuple[pathlib.Path], add_to_right_click_menu: bool):
+def main(
+    max_size,
+    in_file: typing.Tuple[pathlib.Path],
+    add_to_right_click_menu: bool,
+    suffix: str,
+    prefix: str,
+):
     """Downscale file_or_directory to desired max-size."""
     if add_to_right_click_menu:
         if not _ON_WINDOWS:
@@ -56,7 +70,7 @@ def main(max_size, in_file: typing.Tuple[pathlib.Path], add_to_right_click_menu:
     for path in in_file:
         if path.is_dir():
             spec = pathspec.PathSpec.from_lines(
-                pathspec.patterns.GitWildMatchPattern, _DEFAULT_MATCHES
+                pathspec.patterns.GitWildMatchPattern, _DEFAULT_MATCHES + [f"*{suffix}.*"]
             )
             files_to_prcoess.extend([path / p for p in spec.match_tree(path)])
         else:
@@ -73,7 +87,9 @@ def main(max_size, in_file: typing.Tuple[pathlib.Path], add_to_right_click_menu:
             file = file.resolve()
         print(f"Downscaling {file}...")
         try:
-            downscale_image.downscale(file, max_mega_bytes=max_size)
+            downscale_image.downscale(
+                file, max_mega_bytes=max_size, output_prefix=prefix, outtput_suffix=suffix
+            )
             print(f"Finished")
         except Exception as e:
             fail_count += 1
