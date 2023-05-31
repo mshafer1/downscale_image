@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "downscale_image"
-version = "1.4.0"
+version = "1.4.1"
 description = "downscale image to desired file size"
 authors = ["mshafer1"]
 license = "MIT"

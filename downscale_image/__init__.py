@@ -48,6 +48,7 @@ def downscale(
     current_multiplier = 10
 
     if current_size <= max_mega_bytes:
+        print("Not changing")
         return img
 
     out_suffix = f".{override_output_format}" if override_output_format else ".".join(img.suffixes)
