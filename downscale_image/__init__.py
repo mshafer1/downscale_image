@@ -5,9 +5,12 @@ import shutil
 import subprocess
 import sys
 import typing
+import logging
 
 SUPPORTED_FILE_EXTENSIONS = [".jpg", ".jpeg", ".png", ".bmp"]
 
+_MODULE_LOGGER = logging.getLogger(__name__)
+_MODULE_LOGGER.addHandler(logging.NullHandler())
 
 def _bytes_to_mega_bytes(bytes: int) -> float:
     return bytes / 1024 / 1024
@@ -26,8 +29,8 @@ def _scale(img: pathlib.Path, out_img: pathlib.Path, scale: float) -> pathlib.Pa
             f'ffmpeg -i "{img}" -vf scale="iw/{as_divisor:.2f}:-1" "{out_img}"',
             stderr=subprocess.STDOUT,
         )
-    except subprocess.CalledProcessError:
-        print(output, file=sys.stderr)
+    except subprocess.CalledProcessError as e:
+        _MODULE_LOGGER.warning("Failed to process %s:\n %s", img, e.output)
         raise
     except FileNotFoundError:
         print(
