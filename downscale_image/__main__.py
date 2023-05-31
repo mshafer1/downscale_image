@@ -23,6 +23,7 @@ _CWD = pathlib.Path.cwd()
 
 
 @click.command()
+@click.version_option()
 @click.option(
     "--max-size",
     default=2,
