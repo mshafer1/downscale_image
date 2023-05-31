@@ -1,4 +1,5 @@
 """Downscale an image to desired file size."""
+import logging
 import pathlib
 import platform
 import sys
@@ -12,6 +13,7 @@ import tqdm.contrib.logging
 import downscale_image
 
 _ON_WINDOWS = platform.system().lower() == "windows"
+_MODULE_LOGGER = logging.getLogger(__name__)
 
 if _ON_WINDOWS:
     from downscale_image import _registry_utils
@@ -108,12 +110,11 @@ def main(
                 )
                 print(f"Finished. Output stored in {output}\n\n")
             except Exception as e:
+                _MODULE_LOGGER.warning("Failed to downscale (%s), error:\n%s\n\n", file, e)
                 fail_count += 1
                 if not continue_on_errors and fail_count > 5:
                     print("Several errors have occured, stopping")
                     break
-                print("An error occured", file=sys.stderr)
-                print(e, file=sys.stderr)
                 last_error = e
                 print("")
                 print("")
