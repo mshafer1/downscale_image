@@ -95,7 +95,7 @@ def main(
     fail_count = 0
     last_error = None
     if not files_to_prcoess:
-        print("Nothing to process.")
+        _MODULE_LOGGER.warning("Nothing to process.")
     file: pathlib.Path
     with tqdm.contrib.logging.logging_redirect_tqdm():
         for file in tqdm.tqdm(files_to_prcoess, desc="Downscaling: "):
@@ -108,7 +108,7 @@ def main(
                 output = downscale_image.downscale(
                     file, max_mega_bytes=max_size, output_prefix=prefix, outtput_suffix=suffix, override_output_format=override_output_format
                 )
-                print(f"Finished. Output stored in {output}\n\n")
+                print(f"Finished. Output stored in {output}\n")
             except Exception as e:
                 _MODULE_LOGGER.warning("Failed to downscale (%s), error:\n%s\n\n", file, e)
                 fail_count += 1
