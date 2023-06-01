@@ -53,6 +53,11 @@ _CWD = pathlib.Path.cwd()
     default=False,
 )
 @click.option(
+    "--log-file",
+    help="File to log messages to.",
+    type=click.Path(path_type=pathlib.Path)
+)
+@click.option(
     "--continue-on-errors",
     help="Even if multiple errors are encountered keep going through all images",
     is_flag=True,
@@ -72,9 +77,13 @@ def main(
     prefix: str,
     override_output_format: typing.Optional[str],
     continue_on_errors: bool,
+    log_file: typing.Optional[pathlib.Path],
 ):
     """Downscale file_or_directory to desired max-size."""
     logging.basicConfig(format="%(asctime)s %(levelname)s -- %(message)s", level=logging.WARNING)
+    if log_file:
+        root_logger = logging.getLogger()
+        root_logger.addHandler(logging.FileHandler(filename=str(log_file)))
     if add_to_right_click_menu:
         if not _ON_WINDOWS:
             raise Exception("Error, registry right click menus are only support on Windows.")
