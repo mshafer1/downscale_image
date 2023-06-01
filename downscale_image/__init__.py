@@ -1,4 +1,5 @@
 """Utility to downscale an image to the desired file size using ffmpeg."""
+import os
 import os.path
 import pathlib
 import shutil
@@ -57,7 +58,11 @@ def downscale(
     out_suffix = f".{override_output_format}" if override_output_format else ".".join(img.suffixes)
     working_img = img.parent / (output_prefix + img.stem + output_suffix + out_suffix)
     working_img.parent.mkdir(exist_ok=True, parents=True)
-    shutil.copyfile(img, working_img)
+    try:
+        shutil.copyfile(img, working_img)
+    except:
+        os.chmod(working_img, 0o777) # read and write by everyone
+        shutil.copyfile(img, working_img)
 
     while current_size > max_mega_bytes:
         if working_img.is_file():
