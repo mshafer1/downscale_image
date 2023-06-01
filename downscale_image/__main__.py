@@ -106,7 +106,7 @@ def main(
             print(f"Downscaling {file}...")
             try:
                 output = downscale_image.downscale(
-                    file, max_mega_bytes=max_size, output_prefix=prefix, outtput_suffix=suffix, override_output_format=override_output_format
+                    file, max_mega_bytes=max_size, output_prefix=prefix, output_suffix=suffix, override_output_format=override_output_format
                 )
                 print(f"Finished. Output stored in {output}\n")
             except Exception as e:

@@ -42,7 +42,7 @@ def _scale(img: pathlib.Path, out_img: pathlib.Path, scale: float) -> pathlib.Pa
 
 
 def downscale(
-    img: pathlib.Path, max_mega_bytes: float, *_, output_prefix="", outtput_suffix="_smaller", override_output_format: typing.Optional[str]=None
+    img: pathlib.Path, max_mega_bytes: float, *_, output_prefix="", output_suffix="_smaller", override_output_format: typing.Optional[str]=None
 ) -> pathlib.Path:
     """Incrementally downscale img until it is <= max_mega_bytes in size."""
     current_size = _get_file_size_in_mega(img)
@@ -55,7 +55,7 @@ def downscale(
         return img
 
     out_suffix = f".{override_output_format}" if override_output_format else ".".join(img.suffixes)
-    working_img = img.parent / (output_prefix + img.stem + outtput_suffix + out_suffix)
+    working_img = img.parent / (output_prefix + img.stem + output_suffix + out_suffix)
     working_img.parent.mkdir(exist_ok=True, parents=True)
     shutil.copyfile(img, working_img)
 
