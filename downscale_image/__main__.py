@@ -74,6 +74,7 @@ def main(
     continue_on_errors: bool,
 ):
     """Downscale file_or_directory to desired max-size."""
+    logging.basicConfig(format="%(asctime)s %(levelname)s -- %(message)s", level=logging.WARNING)
     if add_to_right_click_menu:
         if not _ON_WINDOWS:
             raise Exception("Error, registry right click menus are only support on Windows.")
